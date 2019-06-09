@@ -1,6 +1,7 @@
 package com.drkiettran.microprofile.rest;
 
 import java.net.UnknownHostException;
+import java.util.Date;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -11,8 +12,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Path("/greetings")
 public class HelloWorldEndpoint {
+	private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldEndpoint.class);
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -20,6 +25,7 @@ public class HelloWorldEndpoint {
 	public Response doGetDate(@PathParam("year") int year, @PathParam("month") int month, @PathParam("day") int day) {
 
 		String date = year + "/" + month + "/" + day;
+		LOGGER.info("Received: {}", date);
 		Message message = new Message();
 		message.setName("Thorntail");
 		message.setMessage(date);
@@ -39,6 +45,7 @@ public class HelloWorldEndpoint {
 		Greetings greetings = new Greetings();
 		message.setName(inMessage.getName());
 		message.setMessage(greetings.hello(inMessage.getName()));
+		message.setDate(new Date());
 		return Response.status(200).entity(message).build();
 	}
 }
